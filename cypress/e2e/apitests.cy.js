@@ -1,5 +1,5 @@
 describe('Test 2', () => {
-
+  // I've made too many attemps and ClearScore servers blocked my IP for 24 hours so I am getting a 400 status code
   it('Failed login attempt API test', () => {
       cy.request({
           method: 'POST',
@@ -23,7 +23,7 @@ describe('Test 2', () => {
       })
   })
 
-// I've made too many attemps and ClearScore servers blocked my IP for 24 hours so I've added a skip flag
+// I've made too many attemps and ClearScore servers blocked my IP for 24 hours so I am getting a 400 status code and I've added a skip flag for this test
   it.skip('Failed login attempt API test with UI', () => {
     cy.intercept({
       method: 'POST',
