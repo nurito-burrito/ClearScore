@@ -1,4 +1,4 @@
-describe('Test API', () => {
+describe('Test 2', () => {
 
   it('Failed login attempt API test', () => {
       cy.request({
@@ -21,5 +21,27 @@ describe('Test API', () => {
           expect(response.status).to.eq(400)
           expect(response.body.allRequestResponses[0]["Response Body"]).to.eq({"error":"access_denied"})
       })
+  })
+
+// I've made too many attemps and ClearScore servers blocked my IP for 24 hours so I've added a skip flag
+  it.skip('Failed login attempt API test with UI', () => {
+    cy.intercept({
+      method: 'POST',
+      url: 'https://app.clearscore.com/api/global/login-service/v3/authorise',
+  }).as('loginAttempt')
+
+    cy.visit('https://app.clearscore.com/login')
+
+    cy.get('#email').type('test@email.com')
+    cy.get('#password').type('1')
+    cy.get("[data-id='submit']").contains("Log in").click()
+
+    cy
+      .wait('@loginAttempt')
+      .then(failedLoginAttempt => {
+      expect(failedLoginAttempt.response.statusCode).to.eq(400)
+      // These should in theory work if I can get 400 response from server without mocking the response
+      expect(response.body.allRequestResponses[0]["Response Body"]).contains({"error":"access_denied"})
+    })
   })
 })
