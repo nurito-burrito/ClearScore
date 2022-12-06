@@ -1,5 +1,4 @@
 describe('Test 2', () => {
-  // I've made too many attemps and ClearScore servers blocked my IP for 24 hours so I am getting a 400 status code
   it('Failed login attempt API test', () => {
       cy.request({
           method: 'POST',
@@ -19,12 +18,16 @@ describe('Test 2', () => {
           failOnStatusCode: false
       }).should(response => {
           expect(response.status).to.eq(400)
-          expect(response.body.allRequestResponses[0]["Response Body"]).to.eq({"error":"access_denied"})
+          expect(response.body).to.have.property('error', 'access_denied')
+
+        // ClearScore will block your IP if you make too many attemps
+          // expect(response.status).to.eq(429)
+          // expect(response.statusText).to.eq("Too Many Requests")
+          // expect(response.body).to.contain("Please wait 24 hours and try again.")
       })
   })
 
-// I've made too many attemps and ClearScore servers blocked my IP for 24 hours so I am getting a 400 status code and I've added a skip flag for this test
-  it.skip('Failed login attempt API test with UI', () => {
+  it('Failed login attempt API test with UI', () => {
     cy.intercept({
       method: 'POST',
       url: 'https://app.clearscore.com/api/global/login-service/v3/authorise',
@@ -39,9 +42,13 @@ describe('Test 2', () => {
     cy
       .wait('@loginAttempt')
       .then(failedLoginAttempt => {
-      expect(failedLoginAttempt.response.statusCode).to.eq(400)
-      // These should in theory work if I can get 400 response from server without mocking the response
-      expect(response.body.allRequestResponses[0]["Response Body"]).contains({"error":"access_denied"})
+      expect(failedLoginAttempt.response.status).to.eq(400)
+      // expect(failedLoginAttempt.response.body).to.contain("")
+    
+    // ClearScore will block your IP if you make too many attemps
+      // expect(failedLoginAttempt.response.statusCode).to.eq(429)
+      // expect(failedLoginAttempt.response.statusMessage).to.eq("Too Many Requests")
+      // expect(failedLoginAttempt.response.body).to.contain("Please wait 24 hours and try again.")
     })
   })
 })
