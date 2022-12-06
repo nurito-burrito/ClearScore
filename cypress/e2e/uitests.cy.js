@@ -35,7 +35,6 @@ describe('Test 3', () => {
   // so not sure if the behavior changed recently or it's just my lack of knowledge.
   // And there is *potential bug* or a UX issue for better wording if user includes @ but does not add a '.com' or any other domain extension, 
   // and taps on Get you score button app will stay idle and wont alert the user 
-  // Happy to complete the UI test during a pair programming session should this be an expected behavior and should I get a hint on how to access that object.
   it.skip('valid email address required message', () => {
     cy.get('#email').type('1')
   })
@@ -43,7 +42,6 @@ describe('Test 3', () => {
 
   // If this fails, please rerun it. Website sometimes takes user to signup page and not register screen, *possible bug*
   it('valid email address takes user to register screen', () => {
-    // cy.visit('https://www.clearscore.com')
     cy.get('#email').type('testemailthattakesyoutoregistrationscreen@email.com')
     cy.get("[type='submit']").click()
 
