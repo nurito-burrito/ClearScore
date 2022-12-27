@@ -15,37 +15,28 @@ describe('Test 1', () => {
 })
 
 describe('Test 3', () => {
-  
   it('Using your FE framework from Test 1, provide tests to  address the following acceptance criteria', () => {
+
     cy.log('Assert an email address is required to sign up')
+    cy.get('#email').type('abc')
     cy.get("[type='submit']").click()
-    // I am asserting that user is not taken to the sign up page by asserting there is not signup in the URL
-    cy.url().should('not.contain', 'signup')
-  })
+    cy.get('input:invalid').should('have.length', 1)
+    cy.get('[type="email"]').then(($input) => {
+      expect($input[0].validationMessage).to.contain("Please include an '@' in the email address.")
+    })
 
-
-  
-  // User is able to click without having to enter an email address, *potential bug* please confirm the behavior 
-  xit('email address required message', () => {
+    cy.log('Assert a valid email address must be provided to sign up')
+    cy.get('#email').type('abc@.')
     cy.get("[type='submit']").click()
-    // I am asserting that user is not taken to the sign up page by asserting there is not signup in the URL
-    cy.url().should('not.contain', 'signup')
-  })
+    cy.get('input:invalid').should('have.length', 1)
+    cy.get('[type="email"]').then(($input) => {
+      expect($input[0].validationMessage).to.contain("'.' is used at a wrong position in '.'.")
+    })
 
-  // I cannot access the floating alerts that says 'Please include an '@'  in the email...' 
-  // so not sure if the behavior changed recently or it's just my lack of knowledge.
-  // And there is *potential bug* or a UX issue for better wording if user includes @ but does not add a '.com' or any other domain extension, 
-  // and taps on Get you score button app will stay idle and wont alert the user 
-  xit('valid email address required message', () => {
-    cy.get('#email').type('1')
-  })
-
-
-  // If this fails, please rerun it. Website sometimes takes user to signup page and not register screen, *possible bug*
-  xit('valid email address takes user to register screen', () => {
+    cy.log('Assert when a valid email address is provided, and Sign up is  clicked, the user is taken to step 1 of registration')
+    cy.get('#email').clear()
     cy.get('#email').type('testemailthattakesyoutoregistrationscreen@email.com')
     cy.get("[type='submit']").click()
-
     cy.url().should('contain', 'step1')
     cy.title().should('eq', 'ClearScore')
   })
