@@ -9,6 +9,7 @@ module.exports = defineConfig({
     "viewportHeight": 900,
     "baseUrl": "https://www.clearscore.com",
     "defaultCommandTimeout": 15000,
+    "chromeWebSecurity": true,
     "watchForFileChanges": false,
     "hideXHRInCommandLog": true
   },
